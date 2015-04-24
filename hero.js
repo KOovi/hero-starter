@@ -39,6 +39,18 @@
 
 */
 
+/*
+ The plan is create only one strategy which can react for all things about game.
+ I think the program will has much variables what I can set in, and through them I can change my hero's strategy :)
+
+ Pseudo code:
+ If enemy is near with low health (equal or under 30HP == one hit) and he is alone and not be near to a health well.
+ */
+var moves = function(gameData, helpers) {
+    var enemyNear = 1; //How much
+};
+
+
 // Strategy definitions
 var moves = {
   // Aggressor
@@ -180,7 +192,7 @@ var moves = {
  };
 
 //  Set our heros strategy
-var  move =  moves.aggressor;
+var  move =  moves.safeDiamondMiner;
 
 // Export the move function here
 module.exports = move;
