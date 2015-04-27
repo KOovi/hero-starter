@@ -47,7 +47,56 @@
  If enemy is near with low health (equal or under 30HP == one hit) and he is alone and not be near to a health well.
  */
 var moves = function(gameData, helpers) {
-    var enemyNear = 1; //How much
+    /*
+    version 0.1: everything is based on my hero's health
+     */
+    var myHealth = gameData.activeHero.health;
+    var myFromTop = gameData.activeHero.distanceFromTop;
+    var myFromLeft = gameData.activeHero.distanceFromLeft;
+
+    function isItNextTo(board, distanceFromTop, distanceFromLeft, tileCallback){
+        /*
+        Search for tileType next to coordinates, if it finds tileType return true else return false
+         */
+        var directions = ['North', 'East', 'South', 'West'];
+        directions.forEach(function(element){
+            if(tileCallback(helpers.getTileNearby(board,distanceFromTop,distanceFromLeft,element))){
+                return true;
+            }
+        });
+        return false;
+    }
+
+    function getInjuredTeammates(){
+        /*
+        Injured friends
+         */
+        var pathInfoObject = helpers.findNearestObjectDirectionAndDistance(board, hero, function(enemyTile) {
+            return enemyTile.type === 'Hero' && enemyTile.team !== hero.team && enemyTile.health < hero.health;
+        });
+
+    }
+
+
+    function willIUnderAttack(){
+        /*
+        Search for enemies near enough to attack me in next turn. Return enemies coordinates [array of enemies] or false
+         */
+    }
+
+    var nearestEnemy = helpers.findNearestEnemy();
+    var nearestEnemyHealth = nearestEnemy.health;
+
+    if(myHealth <= 30){
+        if(nearestEnemyHealth <= 30 && isItNextTo(gameData.board, myFromTop,myFromLeft,function(tile){
+                return tile.type === 'Hero' && tile.team != gameData.activeHero.team;})){
+
+        }
+        return helpers.findNearestHealthWell(gameData);
+    }
+    else if (5 == "5"){
+
+    }
 };
 
 
@@ -135,6 +184,8 @@ var moves = {
   // This hero will attempt to capture enemy diamond mines.
   safeDiamondMiner : function(gameData, helpers) {
     var myHero = gameData.activeHero;
+
+      console.log("console.log");
 
     //Get stats on the nearest health well
     var healthWellStats = helpers.findNearestObjectDirectionAndDistance(gameData.board, myHero, function(boardTile) {
