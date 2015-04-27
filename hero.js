@@ -39,67 +39,6 @@
 
 */
 
-/*
- The plan is create only one strategy which can react for all things about game.
- I think the program will has much variables what I can set in, and through them I can change my hero's strategy :)
-
- Pseudo code:
- If enemy is near with low health (equal or under 30HP == one hit) and he is alone and not be near to a health well.
- */
-var moves = function(gameData, helpers) {
-    /*
-    version 0.1: everything is based on my hero's health
-     */
-    var myHealth = gameData.activeHero.health;
-    var myFromTop = gameData.activeHero.distanceFromTop;
-    var myFromLeft = gameData.activeHero.distanceFromLeft;
-
-    function isItNextTo(board, distanceFromTop, distanceFromLeft, tileCallback){
-        /*
-        Search for tileType next to coordinates, if it finds tileType return true else return false
-         */
-        var directions = ['North', 'East', 'South', 'West'];
-        directions.forEach(function(element){
-            if(tileCallback(helpers.getTileNearby(board,distanceFromTop,distanceFromLeft,element))){
-                return true;
-            }
-        });
-        return false;
-    }
-
-    function getInjuredTeammates(){
-        /*
-        Injured friends
-         */
-        var pathInfoObject = helpers.findNearestObjectDirectionAndDistance(board, hero, function(enemyTile) {
-            return enemyTile.type === 'Hero' && enemyTile.team !== hero.team && enemyTile.health < hero.health;
-        });
-
-    }
-
-
-    function willIUnderAttack(){
-        /*
-        Search for enemies near enough to attack me in next turn. Return enemies coordinates [array of enemies] or false
-         */
-    }
-
-    var nearestEnemy = helpers.findNearestEnemy();
-    var nearestEnemyHealth = nearestEnemy.health;
-
-    if(myHealth <= 30){
-        if(nearestEnemyHealth <= 30 && isItNextTo(gameData.board, myFromTop,myFromLeft,function(tile){
-                return tile.type === 'Hero' && tile.team != gameData.activeHero.team;})){
-
-        }
-        return helpers.findNearestHealthWell(gameData);
-    }
-    else if (5 == "5"){
-
-    }
-};
-
-
 // Strategy definitions
 var moves = {
   // Aggressor
@@ -185,8 +124,6 @@ var moves = {
   safeDiamondMiner : function(gameData, helpers) {
     var myHero = gameData.activeHero;
 
-      console.log("console.log");
-
     //Get stats on the nearest health well
     var healthWellStats = helpers.findNearestObjectDirectionAndDistance(gameData.board, myHero, function(boardTile) {
       if (boardTile.type === 'HealthWell') {
@@ -241,6 +178,66 @@ var moves = {
     return helpers.findNearestHealthWell(gameData);
   }
  };
+
+/*
+ The plan is create only one strategy which can react for all things about game.
+ I think the program will has much variables what I can set in, and through them I can change my hero's strategy :)
+
+ Pseudo code:
+ If enemy is near with low health (equal or under 30HP == one hit) and he is alone and not be near to a health well.
+ */
+var moves = function(gameData, helpers) {
+    /*
+     version 0.1: everything is based on my hero's health
+     */
+    var myHealth = gameData.activeHero.health;
+    var myFromTop = gameData.activeHero.distanceFromTop;
+    var myFromLeft = gameData.activeHero.distanceFromLeft;
+
+    function isItNextTo(board, distanceFromTop, distanceFromLeft, tileCallback){
+        /*
+         Search for tileType next to coordinates, if it finds tileType return true else return false
+         */
+        var directions = ['North', 'East', 'South', 'West'];
+        directions.forEach(function(element){
+            if(tileCallback(helpers.getTileNearby(board,distanceFromTop,distanceFromLeft,element))){
+                return true;
+            }
+        });
+        return false;
+    }
+
+    function getInjuredTeammates(){
+        /*
+         Injured friends
+         */
+        var pathInfoObject = helpers.findNearestObjectDirectionAndDistance(board, hero, function(enemyTile) {
+            return enemyTile.type === 'Hero' && enemyTile.team !== hero.team && enemyTile.health < hero.health;
+        });
+
+    }
+
+
+    function willIUnderAttack(){
+        /*
+         Search for enemies near enough to attack me in next turn. Return enemies coordinates [array of enemies] or false
+         */
+    }
+
+    var nearestEnemy = helpers.findNearestEnemy();
+    var nearestEnemyHealth = nearestEnemy.health;
+
+    if(myHealth <= 30){
+        if(nearestEnemyHealth <= 30 && isItNextTo(gameData.board, myFromTop,myFromLeft,function(tile){
+                return tile.type === 'Hero' && tile.team != gameData.activeHero.team;})){
+
+        }
+        return helpers.findNearestHealthWell(gameData);
+    }
+    else if (5 == "5"){
+
+    }
+};
 
 //  Set our heros strategy
 var  move =  moves.safeDiamondMiner;
